@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пиксель — учёт заявок</title>
+    <link rel="icon" type="image/png" href="images/0-edited-free (carve.photos).png">
+</head>
+
+<body>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #1E1B1C;
+            color: #ffffff;
+        }
+
+        header {
+            background: #1E1B1C;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #332d2f;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #E91E63;
+        }
+
+        header button {
+            background: #E91E63;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        header button:hover {
+            background: #c2185b;
+        }
+
+        button {
+            transition: background 0.2s ease;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid #E91E63;
+            outline-offset: 2px;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        aside {
+            width: 230px;
+            flex-shrink: 0;
+            background: #242021;
+            padding: 25px 15px;
+            border-right: 1px solid #332d2f;
+        }
+
+        aside button {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 8px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        aside button:hover,
+        aside button.active {
+            background: #3a2029;
+            color: #E91E63;
+        }
+
+        main {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #ffffff;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .welcome-text {
+            margin-top: 10px;
+            color: #cccccc;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #242021;
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid #332d2f;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .card h3 {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #E91E63;
+        }
+
+        .form {
+            background: #242021;
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 750px;
+            border: 1px solid #332d2f;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #51464a;
+            border-radius: 7px;
+            font-size: 15px;
+            background: #1E1B1C;
+            color: #ffffff;
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #E91E63;
+        }
+
+        select option {
+            background: #1E1B1C;
+            color: #ffffff;
+        }
+
+        small {
+            display: block;
+            color: #aaa;
+            margin-top: 6px;
+        }
+
+        .primary {
+            background: #E91E63;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .primary:hover {
+            background: #c2185b;
+        }
+
+        .secondary {
+            background: #3a2029;
+            color: #E91E63;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .secondary:hover {
+            background: #4a252f;
+        }
+
+        .home-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .home-buttons button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .add-box {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #292325;
+            border-radius: 10px;
+            border: 1px solid #332d2f;
+        }
+
+        .add-box h3 {
+            color: #ffffff;
+            margin-bottom: 18px;
+        }
+
+        .phone-hint {
+            color: #888;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .table-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .table-tools .search {
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        .table-tools select {
+            max-width: 230px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            background: #242021;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #332d2f;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #332d2f;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #30292b;
+            color: #E91E63;
+        }
+
+        td {
+            color: #dddddd;
+        }
+
+        tr:hover td {
+            background: #2b2527;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .success {
+            background: #193b28;
+            color: #66e394;
+        }
+
+        .new {
+            background: rgba(105, 90, 205, 0.356);
+            color: #a99cff;
+        }
+
+        .waiting {
+            background: #40351d;
+            color: #ffd45c;
+        }
+
+        .search {
+            margin-bottom: 20px;
+            max-width: 500px;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.good {
+            background: #193b28;
+            color: #66e394;
+        }
+
+        .message.bad {
+            background: #421f27;
+            color: #ff6b81;
+        }
+
+        .action-button {
+            padding: 7px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            background: #3a2029;
+        }
+
+        .action-button:hover {
+            background: #4a252f;
+        }
+
+        .action-button.danger {
+            background: #51202a;
+        }
+
+        .action-button.danger:hover {
+            background: #762737;
+        }
+
+        .action-button.edit {
+            background: #3a2029;
+            color: #ff80ab;
+        }
+
+        .price-preview {
+            color: #E91E63;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 10px 0;
+        }
+
+        .empty-message {
+            color: #aaa;
+            margin: 12px 0;
+        }
+
+        .report-details {
+            margin-bottom: 25px;
+        }
+
+        .report-details p {
+            margin: 12px 0;
+            color: #ccc;
+        }
+
+        .report-details strong {
+            color: #E91E63;
+        }
+
+        .report-details button {
+            margin-top: 10px;
+        }
+
+        .report-heading {
+            margin: 25px 0 15px;
+        }
+
+        .details-back {
+            margin-top: 20px;
+        }
+
+        .detail-line {
+            padding: 13px 0;
+            border-bottom: 1px solid #332d2f;
+            color: #ccc;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-line strong {
+            color: #E91E63;
+        }
+
+        @media (max-width: 1100px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            main {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 750px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            aside {
+                width: 100%;
+                padding: 12px;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 6px;
+                border-right: none;
+                border-bottom: 1px solid #332d2f;
+            }
+
+            aside button {
+                margin-bottom: 0;
+                padding: 11px;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            .form {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            header {
+                padding: 15px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            header button {
+                padding: 9px 12px;
+            }
+
+            main {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .home-buttons {
+                flex-direction: column;
+            }
+
+            .home-buttons button {
+                width: 100%;
+            }
+
+            .table-tools {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .table-tools select {
+                max-width: none;
+            }
+        }
+
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #1E1B1C;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 380px;
+            padding: 30px;
+            border-radius: 12px;
+            background: #292526;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .login-card h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        .login-card h1 span {
+            color: #E91E63;
+        }
+
+        .login-card p {
+            text-align: center;
+            color: #bbb;
+        }
+
+        .login-card label {
+            font-size: 14px;
+        }
+
+        .login-card input,
+        .login-card select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #51494c;
+            border-radius: 6px;
+            background: #1E1B1C;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .login-card button {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #E91E63;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-card button:hover {
+            opacity: 0.9;
+        }
+
+        .login-card small {
+            color: #aaa;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .login-message {
+            color: #ff6b8a !important;
+            margin: 0;
+            font-size: 14px;
+        }
+    </style>
+
+    <header>
+        <div class="logo" onclick="goHome()">PIXEL<span>.</span></div>
+    </header>
+
+    <div class="container">
+        <aside>
+            <button class="active" onclick="showPage('home', this)">Главная</button>
+            <button onclick="showPage('applications', this)">Заявки</button>
+            <button onclick="showPage('add', this)">Добавить заявку</button>
+            <button onclick="showPage('customers', this)">Покупатели</button>
+            <button onclick="showPage('products', this)">Товары</button>
+            <button onclick="showPage('employees', this)">Сотрудники</button>
+            <button onclick="showPage('search', this)">Поиск заявок</button>
+            <button onclick="showPage('reports', this)">Отчёты</button>
+        </aside>
+
+        <main>
+            <section id="home" class="page active">
+                <h1>«PIXEL»</h1>
+
+                <div class="cards">
+                    <div class="card">
+                        <h3>Всего заявок</h3>
+                        <div class="number" id="totalApplications">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Новые заявки</h3>
+                        <div class="number" id="newApplications">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Выполненные заявки</h3>
+                        <div class="number" id="doneApplications">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Покупатели</h3>
+                        <div class="number" id="customersCount">0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Добро пожаловать!</h2>
+                    <p class="welcome-text">
+                        Здесь можно управлять заявками покупателей,
+                        товарами, сотрудниками и формировать отчёты.
+                    </p>
+                    <div class="home-buttons">
+                        <button class="primary" onclick="openPage('applications')">Заявки</button>
+                        <button class="secondary" onclick="openPage('add')">Добавить заявку</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="applications" class="page">
+                <h1>Заявки</h1>
+
+                <div class="table-tools">
+                    <input class="search" id="applicationFilter" type="text" placeholder="Поиск по заявкам..."
+                        oninput="renderApplications()">
+
+                    <select id="applicationSort" onchange="renderApplications()">
+                        <option value="id">Сначала по номеру</option>
+                        <option value="date">По дате</option>
+                        <option value="price">По стоимости</option>
+                        <option value="status">По статусу</option>
+                    </select>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Покупатель</th>
+                                <th>Телефон</th>
+                                <th>Товар</th>
+                                <th>Количество</th>
+                                <th>Сотрудник</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Стоимость</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicationTable"></tbody>
+                    </table>
+                </div>
+                <p id="applicationsEmpty" class="empty-message"></p>
+            </section>
+
+            <section id="add" class="page">
+                <h1>Добавление заявки</h1>
+
+                <div class="form">
+                    <div class="form-group">
+                        <label for="customer">Покупатель</label>
+                        <select id="customer" required>
+                            <option value="">Выберите покупателя</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employee">Сотрудник</label>
+                        <select id="employee" required>
+                            <option value="">Выберите сотрудника</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product">Товар</label>
+                        <select id="product" required>
+                            <option value="">Выберите товар</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Количество</label>
+                        <input type="number" id="quantity" min="1" max="100" step="1" placeholder="Введите количество"
+                            required>
+                        <small>Допустимое количество: от 1 до 100.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Статус</label>
+                        <select id="status">
+                            <option value="Новая">Новая</option>
+                            <option value="В обработке">В обработке</option>
+                            <option value="Выполнена">Выполнена</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Стоимость заявки</label>
+                        <div id="applicationPrice" class="price-preview">0 ₽</div>
+                    </div>
+
+                    <button class="primary" onclick="addApplication()">Сохранить заявку</button>
+                    <div id="message" class="message" role="status" aria-live="polite"></div>
+                </div>
+            </section>
+
+            <section id="customers" class="page">
+                <h1>Покупатели</h1>
+
+                <div class="add-box">
+                    <h3>Добавить нового покупателя</h3>
+
+                    <div class="form-group">
+                        <label for="newCustomerName">ФИО покупателя</label>
+                        <input id="newCustomerName" type="text" maxlength="100" placeholder="ФИО покупателя">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newCustomerPhone">Телефон</label>
+                        <input id="newCustomerPhone" type="tel" placeholder="+7 900 123-45-67" maxlength="16"
+                            oninput="phoneMask(this)">
+                        <div class="phone-hint">Формат: +7 900 123-45-67</div>
+                    </div>
+
+                    <button class="primary" onclick="addCustomer()">Добавить покупателя</button>
+                    <div id="customerMessage" class="message" role="status"></div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>ФИО</th>
+                                <th>Телефон</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="products" class="page">
+                <h1>База товаров</h1>
+
+                <div class="add-box">
+                    <h3>Добавить товар</h3>
+
+                    <div class="form-group">
+                        <label for="newProductName">Название товара</label>
+                        <input id="newProductName" type="text" maxlength="100" placeholder="Название товара">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newProductPrice">Цена, ₽</label>
+                        <input id="newProductPrice" type="number" min="0.01" max="100000000" step="0.01"
+                            placeholder="Цена товара">
+                    </div>
+
+                    <button class="primary" onclick="addProduct()">Добавить товар</button>
+                    <div id="productMessage" class="message" role="status"></div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Название товара</th>
+                                <th>Цена</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="employees" class="page">
+                <h1>Сотрудники</h1>
+
+                <div class="add-box">
+                    <h3>Добавить нового сотрудника</h3>
+
+                    <div class="form-group">
+                        <label for="newEmployeeName">ФИО сотрудника</label>
+                        <input id="newEmployeeName" type="text" maxlength="100" placeholder="ФИО сотрудника">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newEmployeePosition">Должность</label>
+                        <input id="newEmployeePosition" type="text" maxlength="80" placeholder="Должность">
+                    </div>
+
+                    <button class="primary" onclick="addEmployee()">Добавить сотрудника</button>
+                    <div id="employeeMessage" class="message" role="status"></div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>ФИО</th>
+                                <th>Должность</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeesTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="search" class="page">
+                <h1>Поиск по заявкам</h1>
+
+                <input class="search" type="text" id="searchInput"
+                    placeholder="Введите номер, покупателя, товар, сотрудника или статус..."
+                    oninput="searchApplications()">
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Покупатель</th>
+                                <th>Телефон</th>
+                                <th>Товар</th>
+                                <th>Сотрудник</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Стоимость</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchTable"></tbody>
+                    </table>
+                </div>
+                <p id="searchEmpty" class="empty-message"></p>
+            </section>
+
+            <section id="reports" class="page">
+                <h1>Отчёт по заявкам</h1>
+
+                <div class="cards">
+                    <div class="card">
+                        <h3>Всего заявок</h3>
+                        <div class="number" id="reportTotal">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Новых</h3>
+                        <div class="number" id="reportNew">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Выполнено</h3>
+                        <div class="number" id="reportDone">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>В обработке</h3>
+                        <div class="number" id="reportProcess">0</div>
+                    </div>
+                </div>
+
+                <div class="card report-details">
+                    <h2>Финансовая информация</h2>
+                    <p>Общая стоимость заявок: <strong id="reportRevenue">0 ₽</strong></p>
+                    <p>Средняя стоимость заявки: <strong id="reportAverage">0 ₽</strong></p>
+                    <p>Количество товаров в заявках: <strong id="reportQuantity">0</strong></p>
+                    <button class="primary" onclick="exportReport()">Скачать отчёт CSV</button>
+                    <div id="reportMessage" class="message" role="status"></div>
+                </div>
+
+                <h2 class="report-heading">Список заявок для отчёта</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Покупатель</th>
+                                <th>Товар</th>
+                                <th>Количество</th>
+                                <th>Сотрудник</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Стоимость</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="details" class="page">
+                <h1>Подробная информация о заявке</h1>
+                <div class="card" id="applicationDetails"></div>
+                <button class="primary details-back" onclick="openPage('applications')">
+                    Вернуться к заявкам
+                </button>
+            </section>
+        </main>
+    </div>
+
+    <div id="loginScreen" class="login-screen">
+        <form id="loginForm" class="login-card">
+            <h1>PIXEL<span>.</span></h1>
+            <p>Вход в систему учёта заявок</p>
+
+            <label for="loginRole">Роль</label>
+            <select id="loginRole" required>
+                <option value="admin">Администратор</option>
+                <option value="employee">Сотрудник</option>
+            </select>
+
+            <label for="loginUsername">Логин</label>
+            <input id="loginUsername" type="text" placeholder="Введите логин" required>
+
+            <label for="loginPassword">Пароль</label>
+            <input id="loginPassword" type="password" placeholder="Введите пароль" required>
+
+            <p id="loginMessage" class="login-message"></p>
+
+            <button type="submit">Войти</button>
+
+            <small>
+                Администратор: admin / admin123<br>
+                Сотрудник: employee / employee123
+            </small>
+        </form>
+    </div>
+    <script>
+        const STORAGE_KEY = "pixelApplicationsSystem";
+
+        const initialData = {
+            customers: [
+                { id: 1, name: "Иванов Иван", phone: "+7 900 123-45-67" },
+                { id: 2, name: "Петрова Анна", phone: "+7 900 555-12-34" },
+                { id: 3, name: "Сидоров Максим", phone: "+7 900 777-88-99" }
+            ],
+            products: [
+                { id: 1, name: "iPhone 15", price: 79990 },
+                { id: 2, name: "Ноутбук ASUS", price: 65990 },
+                { id: 3, name: "Наушники Sony", price: 15990 },
+                { id: 4, name: "Монитор Samsung", price: 24990 }
+            ],
+            employees: [
+                { id: 1, name: "Смирнов Алексей", position: "Менеджер" },
+                { id: 2, name: "Кузнецова Мария", position: "Продавец-консультант" },
+                { id: 3, name: "Орлов Дмитрий", position: "Менеджер" }
+            ],
+            applications: [
+                {
+                    id: 1, customerId: 1, productId: 1,
+                    employeeId: 1, quantity: 1,
+                    date: "08.10.2026", status: "Новая"
+                },
+                {
+                    id: 2, customerId: 2, productId: 2,
+                    employeeId: 2, quantity: 1,
+                    date: "08.10.2026", status: "В обработке"
+                },
+                {
+                    id: 3, customerId: 3, productId: 3,
+                    employeeId: 3, quantity: 2,
+                    date: "07.10.2026", status: "Выполнена"
+                }
+            ]
+        };
+
+        let customers = [];
+        let products = [];
+        let employees = [];
+        let applications = [];
+
+        const statuses = ["Новая", "В обработке", "Выполнена"];
+
+        function escapeHTML(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function formatPrice(price) {
+            return Number(price).toLocaleString("ru-RU", {
+                maximumFractionDigits: 2
+            }) + " ₽";
+        }
+
+        function nextId(items) {
+            return items.length
+                ? Math.max(...items.map(item => item.id)) + 1
+                : 1;
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    customers,
+                    products,
+                    employees,
+                    applications
+                }));
+            } catch (error) {
+                console.error("Ошибка сохранения данных:", error);
+                alert("Не удалось сохранить данные. Проверьте настройки браузера.");
+            }
+        }
+
+        function loadData() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+
+                if (!saved) {
+                    customers = initialData.customers.map(item => ({ ...item }));
+                    products = initialData.products.map(item => ({ ...item }));
+                    employees = initialData.employees.map(item => ({ ...item }));
+                    applications = initialData.applications.map(item => ({ ...item }));
+                    saveData();
+                    return;
+                }
+
+                const data = JSON.parse(saved);
+
+                if (
+                    !Array.isArray(data.customers) ||
+                    !Array.isArray(data.products) ||
+                    !Array.isArray(data.employees) ||
+                    !Array.isArray(data.applications)
+                ) {
+                    throw new Error("Неверный формат сохранённых данных");
+                }
+
+                customers = data.customers;
+                products = data.products;
+                employees = data.employees;
+                applications = data.applications;
+            } catch (error) {
+                console.error("Ошибка загрузки данных:", error);
+                alert("Не удалось прочитать сохранённые данные. Загружены начальные данные.");
+
+                customers = initialData.customers.map(item => ({ ...item }));
+                products = initialData.products.map(item => ({ ...item }));
+                employees = initialData.employees.map(item => ({ ...item }));
+                applications = initialData.applications.map(item => ({ ...item }));
+
+                saveData();
+            }
+        }
+
+        function showPage(pageId, button) {
+            document.querySelectorAll(".page").forEach(page => {
+                page.classList.remove("active");
+            });
+
+            const page = document.getElementById(pageId);
+
+            if (!page) return;
+
+            page.classList.add("active");
+
+            document.querySelectorAll("aside button").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            if (button) {
+                button.classList.add("active");
+            }
+
+            refreshPage(pageId);
+        }
+
+        function openPage(pageId) {
+            showPage(pageId, null);
+
+            document.querySelectorAll("aside button").forEach(button => {
+                const handler = button.getAttribute("onclick") || "";
+                if (handler.includes("'" + pageId + "'")) {
+                    button.classList.add("active");
+                }
+            });
+        }
+
+        function goHome() {
+            openPage("home");
+        }
+
+        function refreshPage(pageId) {
+            if (pageId === "home") updateStatistics();
+            if (pageId === "applications") renderApplications();
+            if (pageId === "customers") renderCustomers();
+            if (pageId === "products") renderProducts();
+            if (pageId === "employees") renderEmployees();
+
+            if (pageId === "add") {
+                renderCustomerSelect();
+                renderProductSelect();
+                renderEmployeeSelect();
+                updateApplicationPrice();
+            }
+
+            if (pageId === "search") searchApplications();
+            if (pageId === "reports") renderReports();
+            if (pageId === "details" && currentDetailsId !== null) {
+                renderApplicationDetails(currentDetailsId);
+            }
+        }
+
+        function showMessage(elementId, text, good = true) {
+            const element = document.getElementById(elementId);
+
+            if (!element) return;
+
+            element.textContent = text;
+            element.className = good ? "message show good" : "message show bad";
+        }
+
+        function clearMessage(elementId) {
+            const element = document.getElementById(elementId);
+
+            if (element) {
+                element.textContent = "";
+                element.className = "message";
+            }
+        }
+
+        function getCurrentDate() {
+            const date = new Date();
+
+            return String(date.getDate()).padStart(2, "0") + "." +
+                String(date.getMonth() + 1).padStart(2, "0") + "." +
+                date.getFullYear();
+        }
+
+        function parseDate(dateString) {
+            const parts = String(dateString).split(".");
+
+            if (parts.length !== 3) return 0;
+
+            const day = Number(parts[0]);
+            const month = Number(parts[1]);
+            const year = Number(parts[2]);
+
+            const date = new Date(year, month - 1, day);
+
+            if (
+                date.getFullYear() !== year ||
+                date.getMonth() !== month - 1 ||
+                date.getDate() !== day
+            ) {
+                return 0;
+            }
+
+            return date.getTime();
+        }
+
+        function getCustomer(id) {
+            return customers.find(item => item.id === Number(id));
+        }
+
+        function getProduct(id) {
+            return products.find(item => item.id === Number(id));
+        }
+
+        function getEmployee(id) {
+            return employees.find(item => item.id === Number(id));
+        }
+
+        function getApplicationPrice(application) {
+            const product = getProduct(application.productId);
+
+            return product ? product.price * application.quantity : 0;
+        }
+
+        function getStatusClass(status) {
+            if (status === "Выполнена") return "success";
+            if (status === "Новая") return "new";
+            return "waiting";
+        }
+
+        /* ПОКУПАТЕЛИ */
+
+        function renderCustomerSelect() {
+            const select = document.getElementById("customer");
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Выберите покупателя</option>';
+
+            customers.forEach(customer => {
+                const option = document.createElement("option");
+                option.value = customer.id;
+                option.textContent = customer.name + " — " + customer.phone;
+                select.appendChild(option);
+            });
+        }
+
+        function normalizePhone(phone) {
+            const digits = phone.replace(/\D/g, "");
+
+            if (digits.length === 11 && digits.startsWith("8")) {
+                return "7" + digits.substring(1);
+            }
+
+            if (digits.length === 10) {
+                return "7" + digits;
+            }
+
+            return digits;
+        }
+
+        function isValidPhone(phone) {
+            return /^7\d{10}$/.test(normalizePhone(phone));
+        }
+
+        function addCustomer() {
+            const name = document.getElementById("newCustomerName").value.trim();
+            const phone = document.getElementById("newCustomerPhone").value.trim();
+
+            if (name.length < 2 || name.length > 100) {
+                showMessage("customerMessage", "Введите ФИО длиной от 2 до 100 символов.", false);
+                return;
+            }
+
+            if (/[<>]/.test(name)) {
+                showMessage("customerMessage", "Недопустимые символы в ФИО.", false);
+                return;
+            }
+
+            if (!isValidPhone(phone)) {
+                showMessage("customerMessage", "Введите корректный российский номер телефона.", false);
+                return;
+            }
+
+            const normalizedPhone = normalizePhone(phone);
+
+            if (customers.some(item => normalizePhone(item.phone) === normalizedPhone)) {
+                showMessage("customerMessage", "Покупатель с таким телефоном уже существует.", false);
+                return;
+            }
+
+            const newCustomer = {
+                id: nextId(customers),
+                name,
+                phone: formatPhone(normalizedPhone)
+            };
+
+            customers.push(newCustomer);
+
+            saveData();
+            renderCustomers();
+            renderCustomerSelect();
+            updateStatistics();
+
+            document.getElementById("newCustomerName").value = "";
+            document.getElementById("newCustomerPhone").value = "";
+
+            document.getElementById("customer").value = String(newCustomer.id);
+
+            showMessage("customerMessage", "Покупатель успешно добавлен.");
+        }
+
+        function formatPhone(phone) {
+            const digits = normalizePhone(phone);
+
+            if (!/^7\d{10}$/.test(digits)) return phone;
+
+            return "+7 " + digits.substring(1, 4) + " " +
+                digits.substring(4, 7) + "-" +
+                digits.substring(7, 9) + "-" +
+                digits.substring(9, 11);
+        }
+
+        function phoneMask(input) {
+            let digits = input.value.replace(/\D/g, "");
+
+            if (digits.startsWith("8") || digits.startsWith("7")) {
+                digits = digits.substring(1);
+            }
+
+            digits = digits.substring(0, 10);
+
+            let result = "+7";
+
+            if (digits.length > 0) result += " " + digits.substring(0, 3);
+            if (digits.length > 3) result += " " + digits.substring(3, 6);
+            if (digits.length > 6) result += "-" + digits.substring(6, 8);
+            if (digits.length > 8) result += "-" + digits.substring(8, 10);
+
+            input.value = result;
+        }
+
+        function renderCustomers() {
+            const table = document.getElementById("customersTable");
+            table.innerHTML = "";
+
+            customers.forEach((customer, index) => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${escapeHTML(customer.name)}</td>
+            <td>${escapeHTML(customer.phone)}</td>
+            <td>
+                <button class="action-button edit"
+                    onclick="editCustomer(${customer.id})">Изменить</button>
+                <button class="action-button danger"
+                    onclick="deleteCustomer(${customer.id})">Удалить</button>
+            </td>
+        `;
+
+                table.appendChild(row);
+            });
+
+            document.getElementById("customersCount").textContent = customers.length;
+        }
+
+        function editCustomer(id) {
+            const customer = getCustomer(id);
+            if (!customer) return;
+
+            const name = prompt("Введите новое ФИО:", customer.name);
+            if (name === null) return;
+
+            const phone = prompt("Введите новый телефон:", customer.phone);
+            if (phone === null) return;
+
+            const cleanName = name.trim();
+
+            if (cleanName.length < 2 || cleanName.length > 100 || /[<>]/.test(cleanName)) {
+                alert("ФИО должно содержать от 2 до 100 символов.");
+                return;
+            }
+
+            if (!isValidPhone(phone)) {
+                alert("Введите корректный российский номер телефона.");
+                return;
+            }
+
+            const normalizedPhone = normalizePhone(phone);
+
+            if (customers.some(item =>
+                item.id !== customer.id &&
+                normalizePhone(item.phone) === normalizedPhone
+            )) {
+                alert("Покупатель с таким телефоном уже существует.");
+                return;
+            }
+
+            customer.name = cleanName;
+            customer.phone = formatPhone(normalizedPhone);
+
+            saveData();
+            renderCustomers();
+            renderCustomerSelect();
+            renderApplications();
+            searchApplications();
+            renderReports();
+            updateStatistics();
+
+            showMessage("customerMessage", "Данные покупателя изменены.");
+        }
+
+        function deleteCustomer(id) {
+            if (applications.some(item => item.customerId === id)) {
+                alert("Нельзя удалить покупателя, у которого есть заявки.");
+                return;
+            }
+
+            if (!confirm("Удалить покупателя?")) return;
+
+            customers = customers.filter(item => item.id !== id);
+
+            saveData();
+            renderCustomers();
+            renderCustomerSelect();
+            updateStatistics();
+        }
+
+        /* ТОВАРЫ */
+
+        function renderProductSelect() {
+            const select = document.getElementById("product");
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Выберите товар</option>';
+
+            products.forEach(product => {
+                const option = document.createElement("option");
+                option.value = product.id;
+                option.textContent = product.name + " — " + formatPrice(product.price);
+                select.appendChild(option);
+            });
+        }
+
+        function addProduct() {
+            const name = document.getElementById("newProductName").value.trim();
+            const priceInput = document.getElementById("newProductPrice").value.trim();
+            const price = Number(priceInput);
+
+            if (name.length < 2 || name.length > 100 || /[<>]/.test(name)) {
+                showMessage("productMessage", "Название товара должно содержать от 2 до 100 символов.", false);
+                return;
+            }
+
+            if (
+                priceInput === "" ||
+                !Number.isFinite(price) ||
+                price <= 0 ||
+                price > 100000000
+            ) {
+                showMessage("productMessage", "Цена должна быть больше 0 и не превышать 100 000 000 ₽.", false);
+                return;
+            }
+
+            if (products.some(item => item.name.toLowerCase() === name.toLowerCase())) {
+                showMessage("productMessage", "Товар с таким названием уже существует.", false);
+                return;
+            }
+
+            products.push({
+                id: nextId(products),
+                name,
+                price: Math.round(price * 100) / 100
+            });
+
+            saveData();
+            renderProducts();
+            renderProductSelect();
+
+            document.getElementById("newProductName").value = "";
+            document.getElementById("newProductPrice").value = "";
+
+            showMessage("productMessage", "Товар успешно добавлен.");
+        }
+
+        function renderProducts() {
+            const table = document.getElementById("productsTable");
+            table.innerHTML = "";
+
+            products.forEach((product, index) => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${escapeHTML(product.name)}</td>
+            <td>${formatPrice(product.price)}</td>
+            <td>
+                <button class="action-button edit"
+                    onclick="editProduct(${product.id})">Изменить</button>
+                <button class="action-button danger"
+                    onclick="deleteProduct(${product.id})">Удалить</button>
+            </td>
+        `;
+
+                table.appendChild(row);
+            });
+        }
+
+        function editProduct(id) {
+            const product = getProduct(id);
+            if (!product) return;
+
+            const name = prompt("Введите новое название товара:", product.name);
+            if (name === null) return;
+
+            const priceText = prompt("Введите новую цену:", product.price);
+            if (priceText === null) return;
+
+            const cleanName = name.trim();
+            const price = Number(priceText);
+
+            if (cleanName.length < 2 || cleanName.length > 100 || /[<>]/.test(cleanName)) {
+                alert("Введите корректное название товара.");
+                return;
+            }
+
+            if (!Number.isFinite(price) || price <= 0 || price > 100000000) {
+                alert("Цена должна быть больше 0 и не превышать 100 000 000 ₽.");
+                return;
+            }
+
+            if (products.some(item =>
+                item.id !== product.id &&
+                item.name.toLowerCase() === cleanName.toLowerCase()
+            )) {
+                alert("Товар с таким названием уже существует.");
+                return;
+            }
+
+            product.name = cleanName;
+            product.price = Math.round(price * 100) / 100;
+
+            saveData();
+            renderProducts();
+            renderProductSelect();
+            renderApplications();
+            searchApplications();
+            renderReports();
+
+            showMessage("productMessage", "Данные товара изменены.");
+        }
+
+        function deleteProduct(id) {
+            if (applications.some(item => item.productId === id)) {
+                alert("Нельзя удалить товар, который используется в заявках.");
+                return;
+            }
+
+            if (!confirm("Удалить товар?")) return;
+
+            products = products.filter(item => item.id !== id);
+
+            saveData();
+            renderProducts();
+            renderProductSelect();
+        }
+
+        /* СОТРУДНИКИ */
+
+        function renderEmployeeSelect() {
+            const select = document.getElementById("employee");
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Выберите сотрудника</option>';
+
+            employees.forEach(employee => {
+                const option = document.createElement("option");
+                option.value = employee.id;
+                option.textContent = employee.name + " — " + employee.position;
+                select.appendChild(option);
+            });
+        }
+
+        function addEmployee() {
+            const name = document.getElementById("newEmployeeName").value.trim();
+            const position = document.getElementById("newEmployeePosition").value.trim();
+
+            if (name.length < 2 || name.length > 100 || /[<>]/.test(name)) {
+                showMessage("employeeMessage", "Введите ФИО длиной от 2 до 100 символов.", false);
+                return;
+            }
+
+            if (position.length < 2 || position.length > 80 || /[<>]/.test(position)) {
+                showMessage("employeeMessage", "Введите должность длиной от 2 до 80 символов.", false);
+                return;
+            }
+
+            employees.push({
+                id: nextId(employees),
+                name,
+                position
+            });
+
+            saveData();
+            renderEmployees();
+            renderEmployeeSelect();
+
+            document.getElementById("newEmployeeName").value = "";
+            document.getElementById("newEmployeePosition").value = "";
+
+            showMessage("employeeMessage", "Сотрудник успешно добавлен.");
+        }
+
+        function renderEmployees() {
+            const table = document.getElementById("employeesTable");
+            table.innerHTML = "";
+
+            employees.forEach((employee, index) => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${escapeHTML(employee.name)}</td>
+            <td>${escapeHTML(employee.position)}</td>
+            <td>
+                <button class="action-button edit"
+                    onclick="editEmployee(${employee.id})">Изменить</button>
+                <button class="action-button danger"
+                    onclick="deleteEmployee(${employee.id})">Удалить</button>
+            </td>
+        `;
+
+                table.appendChild(row);
+            });
+        }
+
+        function editEmployee(id) {
+            const employee = getEmployee(id);
+            if (!employee) return;
+
+            const name = prompt("Введите новое ФИО сотрудника:", employee.name);
+            if (name === null) return;
+
+            const position = prompt("Введите новую должность:", employee.position);
+            if (position === null) return;
+
+            const cleanName = name.trim();
+            const cleanPosition = position.trim();
+
+            if (cleanName.length < 2 || cleanName.length > 100 || /[<>]/.test(cleanName)) {
+                alert("Введите корректное ФИО.");
+                return;
+            }
+
+            if (cleanPosition.length < 2 || cleanPosition.length > 80 || /[<>]/.test(cleanPosition)) {
+                alert("Введите корректную должность.");
+                return;
+            }
+
+            employee.name = cleanName;
+            employee.position = cleanPosition;
+
+            saveData();
+            renderEmployees();
+            renderEmployeeSelect();
+            renderApplications();
+            searchApplications();
+            renderReports();
+
+            showMessage("employeeMessage", "Данные сотрудника изменены.");
+        }
+
+        function deleteEmployee(id) {
+            if (applications.some(item => item.employeeId === id)) {
+                alert("Нельзя удалить сотрудника, который указан в существующих заявках.");
+                return;
+            }
+
+            if (!confirm("Удалить сотрудника?")) return;
+
+            employees = employees.filter(item => item.id !== id);
+
+            saveData();
+            renderEmployees();
+            renderEmployeeSelect();
+        }
+
+        /* ЗАЯВКИ */
+
+        function updateApplicationPrice() {
+            const productId = Number(document.getElementById("product").value);
+            const quantity = Number(document.getElementById("quantity").value);
+
+            const product = getProduct(productId);
+            const price = product && Number.isInteger(quantity) && quantity > 0
+                ? product.price * quantity
+                : 0;
+
+            document.getElementById("applicationPrice").textContent = formatPrice(price);
+        }
+
+        function addApplication() {
+            const customerId = Number(document.getElementById("customer").value);
+            const employeeId = Number(document.getElementById("employee").value);
+            const productId = Number(document.getElementById("product").value);
+            const quantityText = document.getElementById("quantity").value.trim();
+            const quantity = Number(quantityText);
+            const status = document.getElementById("status").value;
+
+            if (!getCustomer(customerId)) {
+                showMessage("message", "Выберите покупателя.", false);
+                return;
+            }
+
+            if (!getEmployee(employeeId)) {
+                showMessage("message", "Выберите сотрудника.", false);
+                return;
+            }
+
+            if (!getProduct(productId)) {
+                showMessage("message", "Выберите товар.", false);
+                return;
+            }
+
+            if (
+                quantityText === "" ||
+                !Number.isInteger(quantity) ||
+                quantity < 1 ||
+                quantity > 100
+            ) {
+                showMessage("message", "Количество должно быть целым числом от 1 до 100.", false);
+                return;
+            }
+
+            if (!statuses.includes(status)) {
+                showMessage("message", "Выбран недопустимый статус заявки.", false);
+                return;
+            }
+
+            const newApplication = {
+                id: nextId(applications),
+                customerId,
+                employeeId,
+                productId,
+                quantity,
+                date: getCurrentDate(),
+                status
+            };
+
+            applications.push(newApplication);
+
+            saveData();
+            renderApplications();
+            searchApplications();
+            renderReports();
+            updateStatistics();
+
+            document.getElementById("product").value = "";
+            document.getElementById("quantity").value = "";
+
+            updateApplicationPrice();
+
+            showMessage(
+                "message",
+                "Заявка №" + String(newApplication.id).padStart(3, "0") + " успешно добавлена!"
+            );
+        }
+
+        function renderApplications() {
+            const table = document.getElementById("applicationTable");
+            if (!table) return;
+
+            table.innerHTML = "";
+
+            const filter = (document.getElementById("applicationFilter")?.value || "")
+                .trim().toLowerCase();
+
+            const sort = document.getElementById("applicationSort")?.value || "id";
+
+            let list = applications.filter(application => {
+                const customer = getCustomer(application.customerId);
+                const product = getProduct(application.productId);
+                const employee = getEmployee(application.employeeId);
+
+                const text = [
+                    application.id,
+                    application.date,
+                    application.status,
+                    customer?.name,
+                    customer?.phone,
+                    product?.name,
+                    employee?.name
+                ].join(" ").toLowerCase();
+
+                return text.includes(filter);
+            });
+
+            list.sort((a, b) => {
+                if (sort === "date") return parseDate(b.date) - parseDate(a.date);
+                if (sort === "price") return getApplicationPrice(b) - getApplicationPrice(a);
+                if (sort === "status") return a.status.localeCompare(b.status, "ru");
+                return a.id - b.id;
+            });
+
+            list.forEach(application => {
+                const customer = getCustomer(application.customerId);
+                const product = getProduct(application.productId);
+                const employee = getEmployee(application.employeeId);
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+            <td>${String(application.id).padStart(3, "0")}</td>
+            <td>${escapeHTML(customer?.name || "—")}</td>
+            <td>${escapeHTML(customer?.phone || "—")}</td>
+            <td>${escapeHTML(product?.name || "—")}</td>
+            <td>${application.quantity}</td>
+            <td>${escapeHTML(employee?.name || "—")}</td>
+            <td>${escapeHTML(application.date)}</td>
+            <td>
+                <span class="status ${getStatusClass(application.status)}">
+                    ${escapeHTML(application.status)}
+                </span>
+            </td>
+            <td>${formatPrice(getApplicationPrice(application))}</td>
+            <td>
+                <button class="action-button"
+                    onclick="showApplicationDetails(${application.id})">Подробнее</button>
+                <button class="action-button edit"
+                    onclick="editApplicationStatus(${application.id})">Статус</button>
+                <button class="action-button danger"
+                    onclick="deleteApplication(${application.id})">Удалить</button>
+            </td>
+        `;
+
+                table.appendChild(row);
+            });
+
+            document.getElementById("applicationsEmpty").textContent =
+                list.length ? "" : "Заявки не найдены.";
+        }
+
+        function editApplicationStatus(id) {
+            const application = applications.find(item => item.id === id);
+            if (!application) return;
+
+            const answer = prompt(
+                "Выберите статус:\n1 — Новая\n2 — В обработке\n3 — Выполнена",
+                String(statuses.indexOf(application.status) + 1)
+            );
+
+            if (answer === null) return;
+
+            const index = Number(answer);
+
+            if (!Number.isInteger(index) || index < 1 || index > statuses.length) {
+                alert("Введите 1, 2 или 3.");
+                return;
+            }
+
+            application.status = statuses[index - 1];
+
+            saveData();
+            renderApplications();
+            searchApplications();
+            renderReports();
+            updateStatistics();
+
+            if (currentDetailsId === id) renderApplicationDetails(id);
+        }
+
+        function deleteApplication(id) {
+            if (!confirm("Удалить заявку №" + id + "?")) return;
+
+            applications = applications.filter(item => item.id !== id);
+
+            saveData();
+            renderApplications();
+            searchApplications();
+            renderReports();
+            updateStatistics();
+
+            if (currentDetailsId === id) {
+                currentDetailsId = null;
+                openPage("applications");
+            }
+        }
+
+        let currentDetailsId = null;
+
+        function showApplicationDetails(id) {
+            currentDetailsId = id;
+            openPage("details");
+        }
+
+        function renderApplicationDetails(id) {
+            const application = applications.find(item => item.id === id);
+            const container = document.getElementById("applicationDetails");
+
+            if (!application) {
+                container.textContent = "Заявка не найдена.";
+                return;
+            }
+
+            const customer = getCustomer(application.customerId);
+            const product = getProduct(application.productId);
+            const employee = getEmployee(application.employeeId);
+
+            container.innerHTML = `
+        <div class="detail-line">
+            <strong>Номер заявки:</strong> ${String(application.id).padStart(3, "0")}
+        </div>
+        <div class="detail-line">
+            <strong>Покупатель:</strong> ${escapeHTML(customer?.name || "—")}
+        </div>
+        <div class="detail-line">
+            <strong>Телефон:</strong> ${escapeHTML(customer?.phone || "—")}
+        </div>
+        <div class="detail-line">
+            <strong>Товар:</strong> ${escapeHTML(product?.name || "—")}
+        </div>
+        <div class="detail-line">
+            <strong>Цена за единицу:</strong> ${formatPrice(product?.price || 0)}
+        </div>
+        <div class="detail-line">
+            <strong>Количество:</strong> ${application.quantity}
+        </div>
+        <div class="detail-line">
+            <strong>Общая стоимость:</strong> ${formatPrice(getApplicationPrice(application))}
+        </div>
+        <div class="detail-line">
+            <strong>Сотрудник:</strong> ${escapeHTML(employee?.name || "—")}
+        </div>
+        <div class="detail-line">
+            <strong>Должность:</strong> ${escapeHTML(employee?.position || "—")}
+        </div>
+        <div class="detail-line">
+            <strong>Дата:</strong> ${escapeHTML(application.date)}
+        </div>
+        <div class="detail-line">
+            <strong>Статус:</strong> ${escapeHTML(application.status)}
+        </div>
+        <button class="primary" style="margin-top:20px"
+            onclick="editApplicationStatus(${application.id})">Изменить статус</button>
+    `;
+        }
+
+        /* ПОИСК */
+
+        function searchApplications() {
+            const input = document.getElementById("searchInput");
+            const table = document.getElementById("searchTable");
+
+            if (!input || !table) return;
+
+            const query = input.value.trim().toLowerCase();
+            table.innerHTML = "";
+
+            let count = 0;
+
+            applications.forEach(application => {
+                const customer = getCustomer(application.customerId);
+                const product = getProduct(application.productId);
+                const employee = getEmployee(application.employeeId);
+
+                const text = [
+                    application.id,
+                    customer?.name,
+                    customer?.phone,
+                    product?.name,
+                    employee?.name,
+                    application.date,
+                    application.status,
+                    getApplicationPrice(application)
+                ].join(" ").toLowerCase();
+
+                if (!text.includes(query)) return;
+
+                count++;
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+            <td>${String(application.id).padStart(3, "0")}</td>
+            <td>${escapeHTML(customer?.name || "—")}</td>
+            <td>${escapeHTML(customer?.phone || "—")}</td>
+            <td>${escapeHTML(product?.name || "—")}</td>
+            <td>${escapeHTML(employee?.name || "—")}</td>
+            <td>${escapeHTML(application.date)}</td>
+            <td>
+                <span class="status ${getStatusClass(application.status)}">
+                    ${escapeHTML(application.status)}
+                </span>
+            </td>
+            <td>${formatPrice(getApplicationPrice(application))}</td>
+            <td>
+                <button class="action-button"
+                    onclick="showApplicationDetails(${application.id})">Подробнее</button>
+                <button class="action-button edit"
+                    onclick="editApplicationStatus(${application.id})">Статус</button>
+            </td>
+        `;
+
+                table.appendChild(row);
+            });
+
+            document.getElementById("searchEmpty").textContent =
+                count ? "" : "По вашему запросу ничего не найдено.";
+        }
+
+        /* СТАТИСТИКА И ОТЧЁТЫ */
+
+        function updateStatistics() {
+            const total = applications.length;
+            const newCount = applications.filter(item => item.status === "Новая").length;
+            const doneCount = applications.filter(item => item.status === "Выполнена").length;
+            const processCount = applications.filter(item => item.status === "В обработке").length;
+
+            document.getElementById("totalApplications").textContent = total;
+            document.getElementById("newApplications").textContent = newCount;
+            document.getElementById("doneApplications").textContent = doneCount;
+            document.getElementById("customersCount").textContent = customers.length;
+
+            document.getElementById("reportTotal").textContent = total;
+            document.getElementById("reportNew").textContent = newCount;
+            document.getElementById("reportDone").textContent = doneCount;
+            document.getElementById("reportProcess").textContent = processCount;
+        }
+
+        function renderReports() {
+            updateStatistics();
+
+            const totalValue = applications.reduce(
+                (sum, application) => sum + getApplicationPrice(application), 0
+            );
+
+            const totalQuantity = applications.reduce(
+                (sum, application) => sum + application.quantity, 0
+            );
+
+            document.getElementById("reportRevenue").textContent = formatPrice(totalValue);
+
+            document.getElementById("reportAverage").textContent = formatPrice(
+                applications.length ? totalValue / applications.length : 0
+            );
+
+            document.getElementById("reportQuantity").textContent = totalQuantity;
+
+            const table = document.getElementById("reportTable");
+            table.innerHTML = "";
+
+            applications.forEach(application => {
+                const customer = getCustomer(application.customerId);
+                const product = getProduct(application.productId);
+                const employee = getEmployee(application.employeeId);
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+            <td>${String(application.id).padStart(3, "0")}</td>
+            <td>${escapeHTML(customer?.name || "—")}</td>
+            <td>${escapeHTML(product?.name || "—")}</td>
+            <td>${application.quantity}</td>
+            <td>${escapeHTML(employee?.name || "—")}</td>
+            <td>${escapeHTML(application.date)}</td>
+            <td>${escapeHTML(application.status)}</td>
+            <td>${formatPrice(getApplicationPrice(application))}</td>
+        `;
+
+                table.appendChild(row);
+            });
+        }
+
+        function exportReport() {
+            const rows = [
+                [
+                    "Номер заявки",
+                    "Покупатель",
+                    "Телефон",
+                    "Товар",
+                    "Количество",
+                    "Сотрудник",
+                    "Дата",
+                    "Статус",
+                    "Стоимость"
+                ]
+            ];
+
+            applications.forEach(application => {
+                const customer = getCustomer(application.customerId);
+                const product = getProduct(application.productId);
+                const employee = getEmployee(application.employeeId);
+
+                rows.push([
+                    application.id,
+                    customer?.name || "",
+                    customer?.phone || "",
+                    product?.name || "",
+                    application.quantity,
+                    employee?.name || "",
+                    application.date,
+                    application.status,
+                    getApplicationPrice(application)
+                ]);
+            });
+
+            function csvCell(value) {
+                return '"' + String(value).replace(/"/g, '""') + '"';
+            }
+
+            const csv = "\uFEFF" + rows
+                .map(row => row.map(csvCell).join(";"))
+                .join("\r\n");
+
+            const blob = new Blob([csv], {
+                type: "text/csv;charset=utf-8;"
+            });
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.download = "otchet_pixel.csv";
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            URL.revokeObjectURL(url);
+
+            showMessage("reportMessage", "Отчёт подготовлен для скачивания.");
+        }
+
+        /* ПЕРЕСЧЁТ СТОИМОСТИ */
+
+        document.getElementById("product").addEventListener("change", updateApplicationPrice);
+        document.getElementById("quantity").addEventListener("input", updateApplicationPrice);
+
+        /* ЗАПУСК СИСТЕМЫ */
+
+        loadData();
+
+        renderCustomerSelect();
+        renderProductSelect();
+        renderEmployeeSelect();
+
+        renderApplications();
+        renderCustomers();
+        renderProducts();
+        renderEmployees();
+        searchApplications();
+        renderReports();
+        updateStatistics();
+        updateApplicationPrice();
+
+
+
+        const loginForm = document.getElementById("loginForm");
+        const loginScreen = document.getElementById("loginScreen");
+        const loginMessage = document.getElementById("loginMessage");
+
+        const accounts = {
+            admin: {
+                username: "admin",
+                password: "admin123",
+                role: "admin"
+            },
+            employee: {
+                username: "employee",
+                password: "employee123",
+                role: "employee"
+            }
+        };
+
+        const employeePages = [
+            "home",
+            "applications",
+            "add",
+            "customers",
+            "products",
+            "search"
+        ];
+
+        let currentRole = null;
+
+        // Сохраняем существующую навигацию сайта
+        const originalShowPage = window.showPage;
+
+        window.showPage = function (page) {
+            if (!currentRole) return;
+
+            if (currentRole === "employee" &&
+                !employeePages.includes(page)) {
+                alert("У вас нет доступа к этому разделу.");
+                return;
+            }
+
+            if (typeof originalShowPage === "function") {
+                originalShowPage(page);
+            }
+        };
+
+        // Вход в систему
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const selectedRole =
+                document.getElementById("loginRole").value;
+            const username =
+                document.getElementById("loginUsername").value.trim();
+            const password =
+                document.getElementById("loginPassword").value;
+
+            const account = accounts[selectedRole];
+
+            if (
+                username !== account.username ||
+                password !== account.password
+            ) {
+                loginMessage.textContent =
+                    "Неверный логин или пароль.";
+                return;
+            }
+
+            currentRole = account.role;
+
+            loginScreen.style.display = "none";
+
+            // Скрываем недоступные пункты меню сотрудника
+            document.querySelectorAll("[onclick]").forEach(function (element) {
+                const action = element.getAttribute("onclick") || "";
+
+                const pages = action.match(
+                    /showPage\(['"]([^'"]+)['"]\)/g
+                );
+
+                if (!pages) return;
+
+                const pageMatch = action.match(
+                    /showPage\(['"]([^'"]+)['"]\)/
+                );
+
+                if (!pageMatch) return;
+
+                const page = pageMatch[1];
+
+                if (currentRole === "employee") {
+                    element.style.display =
+                        employeePages.includes(page) ? "" : "none";
+                } else {
+                    element.style.display = "";
+                }
+            });
+
+            // Скрываем сами разделы, если они недоступны сотруднику
+            const employeesSection = document.getElementById("employees");
+            const reportsSection = document.getElementById("reports");
+
+            if (currentRole === "employee") {
+                if (employeesSection) employeesSection.style.display = "none";
+                if (reportsSection) reportsSection.style.display = "none";
+            }
+
+            // Добавляем кнопку выхода
+            if (!document.getElementById("logoutButton")) {
+                const logoutButton = document.createElement("button");
+                logoutButton.id = "logoutButton";
+                logoutButton.textContent = "Выйти";
+                logoutButton.onclick = function () {
+                    currentRole = null;
+                    location.reload();
+                };
+
+                document.querySelector("header")?.appendChild(logoutButton);
+            }
+
+            window.showPage("home");
+        });
+
+        // Не разрешаем пользоваться сайтом до входа
+        document.addEventListener("DOMContentLoaded", function () {
+            loginScreen.style.display = "flex";
+        });
+
+    </script>
+</body>
+
+</html>
